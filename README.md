@@ -50,7 +50,7 @@ all:
 ansible nethermind -m ping
 ```
 
-## Create sudo user (optional)
+## Create `nethermind` sudo user (optional)
 
 - [ ] Change the `group_vars/all` user to any other user with sudo permissions e.g. `root`, `ubuntu`.
 
@@ -65,7 +65,7 @@ ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f .workspace/my_key_na
 ansible-playbook -l nethermind playbooks/setup-user.yml
 ```
 
-> **_NOTE:_** Remember to change the `group_vars/all` file with the new username that you've just setup.
+- [ ] Change the `group_vars/all` file again, this time with the new user `nethermind` that you've just created.
 
 ## Setup Nethermind environment
 
