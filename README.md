@@ -31,7 +31,7 @@ A group may have multiple IPs (hosts). Each Ansible command needs group name to 
 Add nethermind node's IP/host under nethermind group.
 
 Example:
-```
+```yml
 all:
 
   hosts:
@@ -45,13 +45,13 @@ Note: By default the user to login is setup as `ubuntu` in `group_vars/all` file
 
 To check if nodes are reachable, run following commands:
 
-```
+```bash
 ansible nethermind -m ping
 ```
 
 ## Setup Nethermind environment
 
-```
+```bash
 ansible-playbook -l nethermind playbooks/setup-nethermind.yml
 ```
 
@@ -59,7 +59,7 @@ ansible-playbook -l nethermind playbooks/setup-nethermind.yml
 
 Fill the `roles/nethermind-service/files/secrets_file.enc` envs with desired values and encrypt the file.
 
-```
+```bash
 ansible-vault encrypt roles/nethermind-service/files/secrets_file.enc
 ```
 
@@ -73,7 +73,7 @@ You can change the Nethermind's source branch in `roles/build-nethermind/vars/ma
 
 Run the nethermind service while passing secrets file. It will prompt you to provide an ansible vault password.
 
-```
+```bash
 ansible-playbook -l nethermind -e @roles/nethermind-service/files/secrets_file.enc --ask-vault-pass playbooks/start-nethermind.yml
 ```
 
@@ -81,7 +81,7 @@ ansible-playbook -l nethermind -e @roles/nethermind-service/files/secrets_file.e
 
 You can switch the Nethermind's source branch in `roles/update-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
 
-```
+```bash
 ansible-playbook -l nethermind playbooks/update-nethermind.yml
 ```
 
@@ -91,7 +91,7 @@ ansible-playbook -l nethermind playbooks/update-nethermind.yml
 
 To setup a script that's sychronizing system clock
 
-```
+```bash
 ansible-playbook -l nethermind playbooks/setup-sync-clock.yml
 ```
 
@@ -99,7 +99,7 @@ ansible-playbook -l nethermind playbooks/setup-sync-clock.yml
 
 To setup an ufw firewall with open ports on 8545, 9100, 30303 tcp/udp
 
-```
+```bash
 ansible-playbook -l nethermind playbooks/setup-firewall.yml
 ```
 
@@ -107,6 +107,6 @@ ansible-playbook -l nethermind playbooks/setup-firewall.yml
 
 To setup the prometheus node-exporter
 
-```
+```bash
 ansible-playbook -l nethermind playbooks/setup-node-exporter.yml
 ```
