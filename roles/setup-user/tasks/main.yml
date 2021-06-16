@@ -1,0 +1,29 @@
+---
+- name: Make sure we have a 'nethermind' group
+  group:
+    name: nethermind
+    state: present
+
+- name: Allow 'nethermind' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%nethermind'
+    line: '%nethermind ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Add sudoers users to nethermind group
+  user:
+    name: nethermind
+    groups: nethermind
+    append: yes
+    state: present
+    createhome: yes
+    shell: /bin/bash
+
+- name: Set up authorized keys for the deployer user
+  authorized_key: 
+    user: nethermind
+    key: "{{ item }}"
+  with_file:
+    - keys

@@ -1,0 +1,11 @@
+---
+- name: Setup a user account
+  hosts: all
+  tasks:
+    - name: Setup a sudo User
+      include_role:
+        name: roles/setup-user
+        apply:
+          tags: always
+      tags:
+        - install
