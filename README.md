@@ -35,8 +35,9 @@ Example:
 all:
 
   hosts:
+  children:
     nethermind:
-      ansible_host: 
+      hosts:
         xxx.xxx.xx.xx: # <-- nethermind host public IP address
 ```
 

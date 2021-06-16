@@ -1,7 +1,6 @@
 all:
 
   hosts:
+  children:
     nethermind:
-      ansible_host: 
-        
-
+      hosts:
