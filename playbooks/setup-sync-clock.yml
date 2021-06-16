@@ -1,0 +1,11 @@
+---
+- name: Setup crobjob to synchronize system clock
+  hosts: all
+  tasks:
+    - name: Setup Clock synchronization
+      include_role:
+        name: roles/cron
+        apply:
+          tags: always
+      tags:
+        - cronjobs

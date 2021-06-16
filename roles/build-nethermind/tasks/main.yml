@@ -1,0 +1,13 @@
+---
+# tasks file for nethermind
+
+- name: Cloning the Nethermind
+  git:
+    repo: "https://github.com/NethermindEth/nethermind.git"
+    dest: "{{ ansible_env.HOME }}/nethermind"
+    force: yes
+    recursive: yes
+    version: "{{ nethermind_branch }}"
+
+- name: Build Nethermind
+  command: chdir={{ ansible_env.HOME }}/nethermind/src/Nethermind dotnet build Nethermind.sln -c Release -o {{ ansible_env.HOME }}/build

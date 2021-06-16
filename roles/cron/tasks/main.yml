@@ -1,0 +1,20 @@
+---
+- name: Copy fixtime.sh script
+  copy:
+    src: fixtime.sh
+    dest: /usr/local/bin/fixtime.sh
+    mode: "755"
+  become: true
+  tags:
+    - cronjobs
+
+- name: Create time synchronization job
+  cron: 
+      name: "Synchronize clock (every minute)"
+      minute: "*"
+      cron_file: "clock-sync"
+      user: "{{ ansible_env.USER }}"
+      job: "/usr/local/bin/fixtime.sh"
+  become: true
+  tags:
+    - cronjobs

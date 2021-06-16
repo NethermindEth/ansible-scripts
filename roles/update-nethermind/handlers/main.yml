@@ -1,0 +1,22 @@
+---
+
+# reload handlers
+
+- name: reload nethermind
+  systemd:
+    name: nethermind
+    enabled: yes
+    daemon_reload: yes
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}
+
+# restart handlers
+
+- name: restart nethermind
+  systemd:
+    name: nethermind
+    state: restarted
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}

@@ -1,0 +1,19 @@
+---
+- name: Setup Nethermind Node environment
+  hosts: all
+  tasks:
+    - name: Install dependencies
+      include_role:
+        name: roles/dependencies
+        apply:
+          tags: always
+      tags:
+        - install_dependencies
+
+    - name: Build Nethermind
+      include_role:
+        name: roles/build-nethermind
+        apply:
+          tags: always
+      tags:
+        - build

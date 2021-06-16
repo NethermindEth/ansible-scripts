@@ -1,0 +1,23 @@
+---
+# tasks file for nethermind
+
+- name: Pulling latest changes
+  command: chdir={{ ansible_env.HOME }}/nethermind git pull origin master
+
+- name: Switch nethermind branch
+  command: chdir={{ ansible_env.HOME }}/nethermind git checkout {{ nethermind_branch }}
+
+- name: Update submodules
+  command: chdir={{ ansible_env.HOME }}/nethermind git submodule update --init
+
+- name: Register uid {{ ansible_env.USER }}
+  command: id -u {{ ansible_env.USER }}
+  register: uid
+
+- name: Build Nethermind
+  command: chdir={{ ansible_env.HOME }}/nethermind/src/Nethermind dotnet build Nethermind.sln -c Release -o {{ ansible_env.HOME }}/build
+  notify:
+    - reload nethermind
+    - restart nethermind
+  changed_when: true
+  become: true

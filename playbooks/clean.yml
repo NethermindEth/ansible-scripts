@@ -1,0 +1,17 @@
+---
+- name: Clean node and data directory
+  hosts: all
+  tasks:
+    - name: Clean nethermind directory
+      file:
+        path: "{{ ansible_env.HOME }}/nethermind"
+        state: absent
+      tags:
+        - clean
+
+    - name: Clean data directory
+      file:
+        path: "{{ ansible_env.HOME }}/data"
+        state: absent
+      tags:
+        - clean

@@ -1,0 +1,46 @@
+---
+- name: Allow everything and enable ufw
+  ufw:
+    state: enabled
+    policy: allow
+  become: true
+
+- name: Set logging
+  ufw:
+    logging: 'on'
+  become: true
+
+- name: Set connection rate limiting
+  ufw:
+    rule: limit
+    port: ssh #22
+    proto: tcp
+  become: true
+
+- name: Allow tcp on port 30303
+  ufw:
+    rule: allow
+    port: 30303
+    proto: tcp
+  become: true
+
+- name: Allow udp on port 30303
+  ufw:
+    rule: allow
+    port: 30303
+    proto: udp
+  become: true
+
+- name: Allow tcp on port 8545 (JSON-RPC)
+  ufw:
+    rule: allow
+    port: 8545
+    proto: tcp
+  become: true
+
+- name: Allow udp on port 9100 (node-exporter)
+  ufw:
+    rule: allow
+    port: 9100
+    proto: tcp
+  become: true

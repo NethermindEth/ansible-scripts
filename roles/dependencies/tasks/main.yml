@@ -1,0 +1,59 @@
+---
+# tasks file for dependencies
+
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+  become: true
+
+- name: Download Microsoft product repository
+  get_url:
+    url: https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb
+    dest: /tmp/packages-microsoft-prod.deb
+
+- name: Install Microsoft product repository
+  apt: deb=/tmp/packages-microsoft-prod.deb
+  become: true
+
+- name: Make sure HTTPS is supported by apt
+  apt:
+    name: apt-transport-https
+    state: present
+    update_cache: no
+  become: true
+
+- name: Install .NET Core 5.0 SDK
+  apt:
+    name: dotnet-sdk-5.0
+    state: present
+    update_cache: yes
+  register: apt_action
+  retries: 100
+  until: apt_action is success or ('Failed to lock apt for exclusive operation' not in apt_action.msg and '/var/lib/dpkg/lock' not in apt_action.msg)
+  become: true
+
+- name: Install unzip
+  apt:
+    pkg: unzip
+  become: true
+
+- name: Install git
+  apt:
+    pkg: git
+  become: true
+
+- name: Install libsnappy-dev
+  apt:
+    pkg: libsnappy-dev
+  become: true
+
+- name: Install libc6-dev
+  apt:
+    pkg: libc6-dev
+  become: true
+
+- name: Install libc6
+  apt:
+    pkg: libc6
+  become: true
+

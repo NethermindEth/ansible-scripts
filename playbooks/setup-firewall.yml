@@ -1,0 +1,11 @@
+---
+- name: Setup ufw firewall
+  hosts: all
+  tasks:
+    - name: Setup firewall
+      include_role:
+        name: roles/firewall
+        apply:
+          tags: always
+      tags:
+        - install_firewall

@@ -1,0 +1,11 @@
+---
+- name: Update Nethermind Node service
+  hosts: all
+  tasks:
+    - name: Update Nethermind Node
+      include_role:
+        name: roles/update-nethermind
+        apply:
+          tags: always
+      tags:
+        - update

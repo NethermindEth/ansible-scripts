@@ -1,0 +1,7 @@
+all:
+
+  hosts:
+    nethermind:
+      ansible_host: 
+        
+

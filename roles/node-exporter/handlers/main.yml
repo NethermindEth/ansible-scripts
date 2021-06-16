@@ -1,0 +1,21 @@
+---
+# reload handlers
+
+- name: reload node-exporter
+  systemd:
+    name: node-exporter
+    enabled: yes
+    daemon_reload: yes
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}
+
+# restart handlers
+
+- name: restart node-exporter
+  systemd:
+    name: node-exporter
+    state: restarted
+    scope: user
+  environment:
+    XDG_RUNTIME_DIR: /run/user/{{ uid.stdout }}

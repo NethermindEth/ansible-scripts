@@ -1,0 +1,11 @@
+---
+- name: Setup Prometheus node-exporter
+  hosts: all
+  tasks:
+    - name: Setup Node exporter
+      include_role:
+        name: roles/node-exporter
+        apply:
+          tags: always
+      tags:
+        - install
