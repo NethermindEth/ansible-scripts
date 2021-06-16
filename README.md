@@ -56,6 +56,8 @@ ansible nethermind -m ping
 
 - [ ] Create a new SSH key for the user.
 
+> **_NOTE:_** We are using 100 KDF rounds here. Decrypting a key with `-a 100` parameter will take ~1.5sec each time during ssh.
+
 ```bash
 ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f .workspace/my_key_name
 ```
@@ -76,6 +78,8 @@ ansible-playbook -l nethermind playbooks/setup-user.yml
 ```bash
 ansible-playbook -l nethermind playbooks/setup-nethermind.yml
 ```
+
+> **_NOTE:_** You might get prompted for a key passphrase if you set it up. Consider adding the identity to ssh agent with `ssh-add .workspace/my_key_name`
 
 ### Encrypt Nethermind secrets
 
