@@ -57,8 +57,9 @@ ansible nethermind -m ping
 - [ ] Create a new SSH key for the user.
 
 ```bash
-ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f my_key_name
+ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f .workspace/my_key_name
 ```
+- [ ] Change the `private_key_file` in `ansible.cfg` file if needed to adjust the key name.
 
 - [ ] Put the just created `my_key_name.pub` content to `roles/setup-user/files/keys` and run:
 
