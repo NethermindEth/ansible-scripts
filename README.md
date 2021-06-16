@@ -6,6 +6,7 @@ Ansible playbooks to setup Nethermind nodes on different chains.
   * [SSH key](#ssh-key)
   * [Inventory](#inventory)
     + [Setup inventory](#setup-inventory)
+  * [Create sudo user (optional)](#create-sudo-user--optional-)
   * [Setup Nethermind environment](#setup-nethermind-environment)
     + [Encrypt Nethermind secrets](#encrypt-nethermind-secrets)
     + [Run the Nethermind service](#run-the-nethermind-service)
@@ -49,6 +50,24 @@ To check if nodes are reachable, run following commands:
 ansible nethermind -m ping
 ```
 
+## Create sudo user (optional)
+
+Change the `group_vars/all` user to any other user with sudo permissions e.g. `root`, `ubuntu`.
+
+Create a new SSH key for the user.
+
+```bash
+ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f my_key_name
+```
+
+Put the just created `my_key_name.pub` content to `roles/setup-user/files/keys` and run:
+
+```bash
+ansible-playbook -l nethermind playbooks/setup-user.yml
+```
+
+Note: Remember to change the `group_vars/all` file with the new username that you've just setup.
+
 ## Setup Nethermind environment
 
 ```bash
@@ -57,7 +76,7 @@ ansible-playbook -l nethermind playbooks/setup-nethermind.yml
 
 ### Encrypt Nethermind secrets
 
-Fill the `roles/nethermind-service/files/secrets_file.enc` envs with desired values and encrypt the file.
+Fill the `roles/nethermind-service/files/secrets_file.enc` envs with desired values and encrypt the file:
 
 ```bash
 ansible-vault encrypt roles/nethermind-service/files/secrets_file.enc
@@ -71,7 +90,7 @@ Configure Nethermind's non-secret environment variables in `roles/nethermind-ser
 
 You can change the Nethermind's source branch in `roles/build-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
 
-Run the nethermind service while passing secrets file. It will prompt you to provide an ansible vault password.
+Run the nethermind service while passing secrets file. It will prompt you to provide an ansible vault password:
 
 ```bash
 ansible-playbook -l nethermind -e @roles/nethermind-service/files/secrets_file.enc --ask-vault-pass playbooks/start-nethermind.yml
@@ -79,7 +98,7 @@ ansible-playbook -l nethermind -e @roles/nethermind-service/files/secrets_file.e
 
 ### Update the Nethermind service
 
-You can switch the Nethermind's source branch in `roles/update-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
+You can switch the Nethermind's source branch in `roles/update-nethermind/vars/main.yml` by changing the value of `nethermind_branch`. To update run:
 
 ```bash
 ansible-playbook -l nethermind playbooks/update-nethermind.yml
@@ -89,7 +108,7 @@ ansible-playbook -l nethermind playbooks/update-nethermind.yml
 
 #### Time sync
 
-To setup a script that's sychronizing system clock
+To setup a script that's sychronizing system clock:
 
 ```bash
 ansible-playbook -l nethermind playbooks/setup-sync-clock.yml
@@ -97,7 +116,7 @@ ansible-playbook -l nethermind playbooks/setup-sync-clock.yml
 
 #### Firewall
 
-To setup an ufw firewall with open ports on 8545, 9100, 30303 tcp/udp
+To setup an ufw firewall with open ports on 8545, 9100, 30303 tcp/udp:
 
 ```bash
 ansible-playbook -l nethermind playbooks/setup-firewall.yml
@@ -105,7 +124,7 @@ ansible-playbook -l nethermind playbooks/setup-firewall.yml
 
 #### Prometheus node-exporter
 
-To setup the prometheus node-exporter
+To setup the prometheus node-exporter:
 
 ```bash
 ansible-playbook -l nethermind playbooks/setup-node-exporter.yml
