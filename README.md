@@ -59,8 +59,6 @@ ansible nethermind -m ping
 ```bash
 ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f .workspace/my_key_name
 ```
-- [ ] Change the `private_key_file` in `ansible.cfg` file if needed to adjust the key name.
-
 - [ ] Put the just created `my_key_name.pub` content to `roles/setup-user/files/keys` and run:
 
 ```bash
@@ -70,6 +68,8 @@ ansible-playbook -l nethermind playbooks/setup-user.yml
 > **_NOTE:_** Remember to change the `group_vars/all` file with the new username that you've just setup.
 
 ## Setup Nethermind environment
+
+- [ ] Change the `private_key_file` in `ansible.cfg` file if needed to adjust the key name.
 
 - [ ] To setup the Nethermind environment run:
 
