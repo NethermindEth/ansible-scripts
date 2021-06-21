@@ -2,7 +2,7 @@
 - name: Setup nethermind service
   copy:
     src: nethermind.service
-    dest: /etc/systemd/user/nethermind.service
+    dest: /etc/systemd/system/nethermind.service
     mode: "755"
   notify:
     - reload nethermind
@@ -18,10 +18,6 @@
     src: .env
     dest: "{{ ansible_env.HOME }}/data/.env"
   become: true
-
-- name: Register uid {{ ansible_env.USER }}
-  command: id -u {{ ansible_env.USER }}
-  register: uid
 
 - name: Ensure secrets file will be written to environment file
   lineinfile: 

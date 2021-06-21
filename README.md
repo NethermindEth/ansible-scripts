@@ -70,6 +70,8 @@ Note: Remember to change the `group_vars/all` file with the new username that yo
 
 ## Setup Nethermind environment
 
+You can change the Nethermind's source branch in `roles/build-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
+
 ```bash
 ansible-playbook -l nethermind playbooks/setup-nethermind.yml
 ```
@@ -87,8 +89,6 @@ It will prompt you to create an ansible vault password.
 Configure Nethermind's non-secret environment variables in `roles/nethermind-service/files/.env` file. This file will be consumed by the systemd service.
 
 ### Run the Nethermind service
-
-You can change the Nethermind's source branch in `roles/build-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
 
 Run the nethermind service while passing secrets file. It will prompt you to provide an ansible vault password:
 
