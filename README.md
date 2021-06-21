@@ -99,13 +99,9 @@ It will prompt you to create an ansible vault password.
 
 ### Run the Nethermind service
 
-<<<<<<< HEAD
-Run the nethermind service while passing secrets file. It will prompt you to provide an ansible vault password:
-=======
 You can change the Nethermind's source branch in `roles/build-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
 
 - [ ] Run the nethermind service while passing secrets file. It will prompt you to provide an ansible vault password:
->>>>>>> 59ac7d53df05b752c799fe7c5c778bd3baabc186
 
 ```bash
 ansible-playbook -l nethermind -e @roles/nethermind-service/files/secrets_file.enc --ask-vault-pass playbooks/start-nethermind.yml
