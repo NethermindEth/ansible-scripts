@@ -71,13 +71,7 @@ ansible-playbook -l nethermind playbooks/setup-user.yml
 
 ## Setup Nethermind environment
 
-<<<<<<< HEAD
 You can change the Nethermind's source branch in `roles/build-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
-=======
-- [ ] Change the `private_key_file` in `ansible.cfg` file if needed to adjust the key name.
-
-- [ ] To setup the Nethermind environment run:
->>>>>>> 59ac7d53df05b752c799fe7c5c778bd3baabc186
 
 ```bash
 ansible-playbook -l nethermind playbooks/setup-nethermind.yml
