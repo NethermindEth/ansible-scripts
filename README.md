@@ -71,6 +71,8 @@ ansible-playbook -l nethermind playbooks/setup-user.yml
 
 ## Setup Nethermind environment
 
+> **_NOTE:_** If you have created a `nethermind` user, then add it to the `group_vars/all` file before proceeding.
+
 You can change the Nethermind's source branch in `roles/build-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
 
 ```bash
