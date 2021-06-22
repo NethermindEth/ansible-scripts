@@ -10,10 +10,6 @@
 - name: Update submodules
   command: chdir={{ ansible_env.HOME }}/nethermind git submodule update --init
 
-- name: Register uid {{ ansible_env.USER }}
-  command: id -u {{ ansible_env.USER }}
-  register: uid
-
 - name: Build Nethermind
   command: chdir={{ ansible_env.HOME }}/nethermind/src/Nethermind dotnet build Nethermind.sln -c Release -o {{ ansible_env.HOME }}/build
   notify:
