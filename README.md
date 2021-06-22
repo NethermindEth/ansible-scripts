@@ -54,7 +54,7 @@ ansible nethermind -m ping
 
 - [ ] Change the `group_vars/all` user to any other user with sudo permissions e.g. `root`, `ubuntu`.
 
-- [ ] Create a new SSH key for the user.
+- [ ] Create a new SSH key for the user or use the existing ones instead.
 
 > **_NOTE:_** We are using 100 KDF rounds here. Decrypting a key with `-a 100` parameter will take ~1.5sec each time during ssh.
 
@@ -81,26 +81,14 @@ ansible-playbook -l nethermind playbooks/setup-nethermind.yml
 
 > **_NOTE:_** You might get prompted for a key passphrase if you set it up. Consider adding the identity to ssh agent with `ssh-add .workspace/my_key_name`
 
-### Encrypt Nethermind secrets
-
-- [ ] Fill the `roles/nethermind-service/files/secrets_file.enc` envs with desired values and encrypt the file:
-
-```bash
-ansible-vault encrypt roles/nethermind-service/files/secrets_file.enc
-```
-
-It will prompt you to create an ansible vault password.
-
-- [ ] Configure Nethermind's non-secret environment variables in `roles/nethermind-service/files/.env` file. This file will be consumed by the systemd service.
+- [ ] Configure Nethermind's environment variables in `roles/nethermind-service/files/.env` file. This file will be consumed by the systemd service.
 
 ### Run the Nethermind service
 
-You can change the Nethermind's source branch in `roles/build-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
-
-- [ ] Run the nethermind service while passing secrets file. It will prompt you to provide an ansible vault password:
+- [ ] Run the nethermind service:
 
 ```bash
-ansible-playbook -l nethermind -e @roles/nethermind-service/files/secrets_file.enc --ask-vault-pass playbooks/start-nethermind.yml
+ansible-playbook -l nethermind playbooks/start-nethermind.yml
 ```
 
 ### Update the Nethermind service
