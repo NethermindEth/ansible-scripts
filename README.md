@@ -91,6 +91,14 @@ ansible-playbook -l nethermind playbooks/setup-nethermind.yml
 ansible-playbook -l nethermind playbooks/start-nethermind.yml
 ```
 
+#### Run the Nethermind backup service (optional)
+
+Runs the backup service alongside the main node service on the same hostmachine. Make sure that the `.env` file will be configured accordingly. To run:
+
+```bash
+ansible-playbook -l nethermind playbooks/start-nethermind-backup.yml
+```
+
 ### Update the Nethermind service
 
 You can switch the Nethermind's source branch in `roles/update-nethermind/vars/main.yml` by changing the value of `nethermind_branch`. 

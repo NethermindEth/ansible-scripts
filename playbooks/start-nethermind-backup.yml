@@ -1,0 +1,11 @@
+---
+- name: Setup and start Nethermind Backup Node service
+  hosts: all
+  tasks:
+    - name: Setup Nethermind Node
+      include_role:
+        name: roles/nethermind-backup-service
+        apply:
+          tags: always
+      tags:
+        - install

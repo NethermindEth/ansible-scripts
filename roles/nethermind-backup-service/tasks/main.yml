@@ -1,0 +1,24 @@
+---
+- name: Setup nethermind backup service
+  copy:
+    src: nethermind-backup.service
+    dest: /etc/systemd/system/nethermind-backup.service
+    mode: "755"
+  notify:
+    - reload nethermind backup
+  become: true
+
+- name: Create backup directory
+  file:
+    path: "{{ ansible_env.HOME }}/backup"
+    state: directory
+
+- name: Copy environment file
+  copy:
+    src: .env
+    dest: "{{ ansible_env.HOME }}/backup/.env"
+  become: true
+  notify:
+    - reload nethermind backup
+    - restart nethermind backup
+  changed_when: true

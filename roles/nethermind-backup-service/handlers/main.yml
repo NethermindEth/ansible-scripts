@@ -1,0 +1,18 @@
+---
+
+# reload handlers
+
+- name: reload nethermind backup
+  systemd:
+    name: nethermind-backup
+    enabled: yes
+    daemon_reload: yes
+  become: true
+
+# restart handlers
+
+- name: restart nethermind backup
+  systemd:
+    name: nethermind-backup
+    state: restarted
+  become: true

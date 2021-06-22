@@ -17,18 +17,6 @@
   copy:
     src: .env
     dest: "{{ ansible_env.HOME }}/data/.env"
-  become: true
-
-- name: Ensure secrets file will be written to environment file
-  lineinfile: 
-    dest: "{{ ansible_env.HOME }}/data/.env"
-    line: "{{ item }}"
-  with_items:
-    - "NETHERMIND_ETHSTATSCONFIG_SECRET={{ NETHERMIND_ETHSTATSCONFIG_SECRET }}"
-    - "NETHERMIND_ETHSTATSCONFIG_CONTACT={{ NETHERMIND_ETHSTATSCONFIG_CONTACT }}"
-    - "NETHERMIND_SEQCONFIG_APIKEY={{ NETHERMIND_SEQCONFIG_APIKEY }}"
-    - "NETHERMIND_METRICSCONFIG_PUSHGATEWAYURL={{ NETHERMIND_METRICSCONFIG_PUSHGATEWAYURL }}"
-  no_log: True
   notify:
     - reload nethermind
     - restart nethermind
