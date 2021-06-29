@@ -1,0 +1,10 @@
+---
+- name: Setup New Relic Agent
+  vars:
+    nrinfragent_os_name: "{{ os_name }}"
+    nrinfragent_os_version: "{{ os_version }}"
+    nrinfragent_config:
+      license_key: "{{ license_key }}"
+      log_file: /var/log/newrelic/nr-infra.log
+      log_to_stdout: false
+  become: true

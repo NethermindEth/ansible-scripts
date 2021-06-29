@@ -1,0 +1,10 @@
+- hosts: all
+  roles:
+    - name: newrelic.newrelic-infra
+      vars:
+        nrinfragent_os_name: "{{ os_name }}"
+        nrinfragent_os_version: "{{ os_version }}"
+        nrinfragent_config:
+          license_key: "{{ license_key }}"
+          log_to_stdout: false
+      become: true

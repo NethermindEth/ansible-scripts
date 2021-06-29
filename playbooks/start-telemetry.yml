@@ -1,0 +1,11 @@
+---
+- name: Setup and start Telemetry service
+  hosts: all
+  tasks:
+    - name: Setup Telemetry
+      include_role:
+        name: roles/telemetry-service
+        apply:
+          tags: always
+      tags:
+        - install
