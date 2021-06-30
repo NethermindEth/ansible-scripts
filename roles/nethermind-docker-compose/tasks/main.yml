@@ -40,11 +40,26 @@
     update_cache: yes
   become: true
 
+- name: Create "docker" group
+  group:
+    name: "{{ docker_group }}"
+    state: present
+  become: true
+
+- name: Add ansible "nethermind" user to "docker" group
+  user:
+    name: "{{ ansible_user }}"
+    groups: "{{ docker_group }}"
+    append: yes
+  become: true
+
 - name: install docker-compose
   get_url:
     url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
     dest: /usr/local/bin/docker-compose
     mode: 'u+x,g+x'
+    owner: "{{ ansible_user }}"
+    group: "{{ docker_group }}"
   become: true
 
 - name: Create symlink

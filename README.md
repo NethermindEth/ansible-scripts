@@ -1,6 +1,8 @@
 # ansible-scripts
 Ansible playbooks to setup Nethermind nodes on different chains.
 
+OUT OF DATE - docs -> https://www.notion.so/Deploying-new-Nethermind-Node-with-Ansible-6033974128774d848060ffcf1e36b1c9
+
 ##### Table of Contents
   * [Requirements](#requirements)
   * [SSH key](#ssh-key)
