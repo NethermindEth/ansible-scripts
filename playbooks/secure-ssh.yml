@@ -1,0 +1,11 @@
+---
+- name: Secure SSH connection on hostmachine
+  hosts: all
+  tasks:
+    - name: Secure SSH
+      include_role:
+        name: roles/secure-ssh
+        apply:
+          tags: always
+      tags:
+        - security

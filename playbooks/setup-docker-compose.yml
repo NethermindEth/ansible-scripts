@@ -1,0 +1,11 @@
+---
+- name: Setup and start Nethermind docker-compose stack
+  hosts: all
+  tasks:
+    - name: Setup Nethermind docker-compose stack
+      include_role:
+        name: roles/nethermind-docker-compose
+        apply:
+          tags: always
+      tags:
+        - install

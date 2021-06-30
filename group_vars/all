@@ -1,5 +1,2 @@
 ---
-ansible_user: root
-os_name: Ubuntu
-os_version: focal
-license_key: 
+ansible_user: nethermind

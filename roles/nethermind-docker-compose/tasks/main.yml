@@ -1,0 +1,74 @@
+---
+- name: Install docker packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    state: present
+  become: true
+
+- name: Add Docker s official GPG key
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  become: true
+
+- name: Verify that we have the key with the fingerprint
+  apt_key:
+    id: 0EBFCD88
+    state: present
+  become: true
+
+- name: Set up the stable repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    state: present
+    update_cache: yes
+  become: true
+
+- name: Update apt packages
+  apt:
+    update_cache: yes
+  become: true
+
+- name: Install docker
+  apt:
+    name: docker-ce
+    state: present
+    update_cache: yes
+  become: true
+
+- name: install docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
+    dest: /usr/local/bin/docker-compose
+    mode: 'u+x,g+x'
+  become: true
+
+- name: Create symlink
+  file: 
+    src: /usr/local/bin/docker-compose
+    dest: /usr/bin/docker-compose 
+    state: link
+  become: true
+
+- name: Copy docker-compose.yml file
+  copy:
+    src: docker-compose.yml
+    dest: "{{ ansible_env.HOME }}/docker-compose.yml"
+
+- name: Create data directory
+  file:
+    path: "{{ ansible_env.HOME }}/data"
+    state: directory
+
+- name: Copy environment file
+  copy:
+    src: .env
+    dest: "{{ ansible_env.HOME }}/.env"
+  notify:
+    - pull docker-compose
+    - start docker-compose
+  changed_when: true

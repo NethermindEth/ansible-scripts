@@ -10,7 +10,7 @@ Type=simple
 User=nethermind
 Group=nethermind
 ExecStart=/usr/bin/node /home/nethermind/nethermind-telemetry/src/index.js
-Restart=on-failure
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

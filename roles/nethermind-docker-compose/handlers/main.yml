@@ -1,0 +1,11 @@
+---
+
+# pull docker images
+
+- name: pull docker-compose
+  command: "docker-compose pull"
+
+# start docker-compose stack
+
+- name: start docker-compose
+  command: "docker-compose up -d"
