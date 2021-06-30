@@ -1,8 +1,8 @@
 ---
 - name: Setup New Relic Agent
   vars:
-    nrinfragent_os_name: "{{ os_name }}"
-    nrinfragent_os_version: "{{ os_version }}"
+    nrinfragent_os_name: "{{ ansible_distribution }}"
+    nrinfragent_os_version: "{{ ansible_distribution_release }}"
     nrinfragent_config:
       license_key: "{{ license_key }}"
       log_file: /var/log/newrelic/nr-infra.log
