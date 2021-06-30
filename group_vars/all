@@ -1,2 +1,2 @@
 ---
-ansible_user: nethermind
+ansible_user: root
