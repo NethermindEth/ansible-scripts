@@ -73,7 +73,7 @@
   file:
     path: "{{ ansible_env.HOME }}/data"
     state: directory
-
+  
 - name: Copy environment file
   copy:
     src: "{{ chain }}/.env.{{ chain }}"
