@@ -3,3 +3,4 @@
 
 - name: start docker-compose
   command: docker-compose up -d
+  become: true

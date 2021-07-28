@@ -1,9 +1,0 @@
----
-- name: Download Telegraf repository
-  get_url:
-    url: https://dl.influxdata.com/telegraf/releases/telegraf_1.19.0-1_amd64.deb
-    dest: /tmp/telegraf_1.19.0-1_amd64.deb
-
-- name: Install Telegraf repository
-  apt: deb=/tmp/telegraf_1.19.0-1_amd64.deb
-  become: true

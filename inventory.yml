@@ -4,4 +4,4 @@ all:
   children:
     nethermind:
       hosts:
-        :
+        195.201.126.78:
