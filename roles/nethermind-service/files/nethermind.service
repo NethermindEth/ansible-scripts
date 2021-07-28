@@ -28,7 +28,7 @@ CapabilityBoundingSet=~CAP_SYS_ADMIN CAP_SYS_PTRACE CAP_SETUID CAP_SETGID CAP_SE
 SystemCallFilter=~@clock @debug @module @mount @raw-io @reboot @privileged @obsolete
 EnvironmentFile=/home/nethermind/data/.env
 WorkingDirectory=/home/nethermind
-ExecStart=/home/nethermind/build/Nethermind.Runner --datadir /home/nethermind/data --Init.BaseDbPath /mnt/volume_lon1_01/data/nethermind_db
+ExecStart=/home/nethermind/build/Nethermind.Runner --datadir /home/nethermind/data
 Restart=on-failure
 LimitNOFILE=1000000
 
