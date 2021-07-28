@@ -13,6 +13,42 @@
     path: "{{ ansible_env.HOME }}/data"
     state: directory
 
+- name: Copy pullandbuild.sh
+  copy:
+    src: pullandbuild.sh
+    dest: "{{ ansible_env.HOME }}/pullandbuild.sh"
+    mode: a+x
+
+- name: Copy restart.sh
+  copy:
+    src: restart.sh
+    dest: "{{ ansible_env.HOME }}/restart.sh"
+    mode: a+x
+  
+- name: Copy shutdown.sh
+  copy:
+    src: shutdown.sh
+    dest: "{{ ansible_env.HOME }}/shutdown.sh"
+    mode: a+x
+
+- name: Copy status.sh
+  copy:
+    src: status.sh
+    dest: "{{ ansible_env.HOME }}/status.sh"
+    mode: a+x
+
+- name: Copy tail.sh
+  copy:
+    src: tail.sh
+    dest: "{{ ansible_env.HOME }}/tail.sh"
+    mode: a+x
+
+- name: Copy up.sh
+  copy:
+    src: up.sh
+    dest: "{{ ansible_env.HOME }}/up.sh"
+    mode: a+x
+
 - name: Copy environment file
   copy:
     src: .env

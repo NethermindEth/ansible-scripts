@@ -1,43 +1,33 @@
 ---
-- name: Install docker packages
+- name: Install packages using apt
   apt:
-    pkg:
+    name: 
       - apt-transport-https
       - ca-certificates
       - curl
+      - gnupg2
       - software-properties-common
     state: present
-  become: true
+    update_cache: no
 
-- name: Add Docker s official GPG key
+- name: Add Docker GPG apt Key
   apt_key:
-    url: https://download.docker.com/linux/ubuntu/gpg
+    url: "{{ docker_apt_gpg_key }}"
     state: present
   become: true
 
-- name: Verify that we have the key with the fingerprint
-  apt_key:
-    id: 0EBFCD88
-    state: present
-  become: true
-
-- name: Set up the stable repository
+- name: Add Docker Repository
   apt_repository:
-    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    repo: "{{ docker_apt_repository }}"
     state: present
-    update_cache: yes
+    update_cache: true
   become: true
 
-- name: Update apt packages
-  apt:
-    update_cache: yes
-  become: true
-
-- name: Install docker
-  apt:
-    name: docker-ce
+- name: Update apt and install docker-ce
+  apt: 
+    update_cache: no 
+    name: docker-ce 
     state: present
-    update_cache: yes
   become: true
 
 - name: Create "docker" group
@@ -53,9 +43,14 @@
     append: yes
   become: true
 
+- name: Update apt packages
+  apt:
+    update_cache: yes
+  become: true
+
 - name: install docker-compose
   get_url:
-    url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
+    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-{{ ansible_system }}-{{ ansible_userspace_architecture }}
     dest: /usr/local/bin/docker-compose
     mode: 'u+x,g+x'
     owner: "{{ ansible_user }}"
@@ -71,7 +66,7 @@
 
 - name: Copy docker-compose.yml file
   copy:
-    src: docker-compose.yml
+    src: "{{ chain }}/docker-compose.{{ chain }}.yml"
     dest: "{{ ansible_env.HOME }}/docker-compose.yml"
 
 - name: Create data directory
@@ -81,9 +76,8 @@
 
 - name: Copy environment file
   copy:
-    src: .env
+    src: "{{ chain }}/.env.{{ chain }}"
     dest: "{{ ansible_env.HOME }}/.env"
   notify:
-    - pull docker-compose
     - start docker-compose
   changed_when: true

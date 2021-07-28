@@ -3,6 +3,7 @@
   group:
     name: nethermind
     state: present
+  become: true
 
 - name: Allow 'nethermind' group to have passwordless sudo
   lineinfile:
@@ -20,10 +21,3 @@
     state: present
     createhome: yes
     shell: /bin/bash
-
-- name: Set up authorized keys for the deployer user
-  authorized_key: 
-    user: nethermind
-    key: "{{ item }}"
-  with_file:
-    - keys
