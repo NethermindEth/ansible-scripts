@@ -1,12 +1,14 @@
 # #!/bin/bash
-PUBLIC_IP=$1
-KEY_PATH=$2
-CHAIN_NAME=$3
-BRANCH_NAME=${4:-master}
+USER=$1
+PUBLIC_IP=$2
+KEY_PATH=$3
+CHAIN_NAME=$4
+BRANCH_NAME=${5:-master}
 
-if [ -z "$PUBLIC_IP" ] || [ -z "$KEY_PATH" ] || [ -z "$CHAIN_NAME" ] || [ -z "$BRANCH_NAME" ]
+if [ -z "$USER" ] || [ -z "$PUBLIC_IP" ] || [ -z "$KEY_PATH" ] || [ -z "$CHAIN_NAME" ] || [ -z "$BRANCH_NAME" ]
 then
     echo "==> Missing parameters:"
+    echo "====>   USER - Default user used to SSH into VM."
     echo "====>   PUBLIC_IP - Ipv4 Public address of the Virual Machine."
     echo "====>   KEY_PATH - An absolute path to the ssh key that will be used to connect with a VM."
     echo "====>   CHAIN_NAME - Ethereum network/chain/config name."
@@ -15,13 +17,13 @@ then
     exit 1
 else
     echo "==> Setting up system clock synchronization"
-    ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=root" playbooks/setup-sync-clock.yml
+    ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER" playbooks/setup-sync-clock.yml
 
     echo "==> Setting up nethermind sudo user"
-    ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=root" playbooks/setup-user.yml
+    ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER" playbooks/setup-user.yml
 
     echo "==> Securing SSH connection"
-    ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=root ssh_user=nethermind ssh_identity_key=$KEY_PATH.pub" playbooks/secure-ssh.yml
+    ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER ssh_user=nethermind ssh_identity_key=$KEY_PATH.pub" playbooks/secure-ssh.yml
     
     echo "==> Setting up Nethermind environment"
     ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind nethermind_branch=$BRANCH_NAME" playbooks/setup-nethermind.yml
