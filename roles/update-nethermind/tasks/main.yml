@@ -1,31 +1,5 @@
 ---
 # tasks file for nethermind
 
-- name: Pulling latest changes
-  command: chdir={{ ansible_env.HOME }}/nethermind git pull origin master
-
-- name: Switch nethermind branch
-  command: chdir={{ ansible_env.HOME }}/nethermind git checkout {{ nethermind_branch }}
-
-- name: Update submodules
-  command: chdir={{ ansible_env.HOME }}/nethermind git submodule update --init
-
-- name: Build Nethermind
-  command: chdir={{ ansible_env.HOME }}/nethermind/src/Nethermind dotnet build Nethermind.sln -c Release -o {{ ansible_env.HOME }}/build_new
-
-- name: Stop the nethermind.service
-  service: 
-    name: nethermind
-    state: stopped
-  become: true
-
-- name: Remove old build dir
-  command: rm -rf build
-
-- name: Rename new build dir
-  command: mv build_new build
-  notify:
-    - reload nethermind
-    - restart nethermind
-  changed_when: true
-  become: true
+- name: Pull and build changes from Nethermind repository on branch {{ branch }}
+  command: nnm pullandbuild "{{ branch }}"

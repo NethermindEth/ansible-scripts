@@ -1,17 +1,11 @@
 ---
-- name: Clean node and data directory
+- name: Clean ethermind environment
   hosts: all
   tasks:
-    - name: Clean nethermind directory
+    - name: Clean nethermind environment
       file:
-        path: "{{ ansible_env.HOME }}/nethermind"
+        path: "{{ ansible_env.HOME }}/*"
         state: absent
-      tags:
-        - clean
-
-    - name: Clean data directory
-      file:
-        path: "{{ ansible_env.HOME }}/data"
-        state: absent
+      become: true
       tags:
         - clean
