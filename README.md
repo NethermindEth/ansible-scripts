@@ -115,7 +115,7 @@ ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_
 
 #### Clock sync
 
-- [ ] To setup a script that's sychronizing system clock:
+To setup a script that's sychronizing system clock:
 
 ```bash
 ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-sync-clock.yml
@@ -123,7 +123,7 @@ ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_
 
 #### Firewall
 
-- [ ] To setup an ufw firewall with open ports on 8545, 9100, 30303 tcp/udp:
+To setup an ufw firewall with open ports on 8545, 9100, 30303 tcp/udp:
 
 ```bash
 ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-firewall.yml
@@ -131,7 +131,7 @@ ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_
 
 #### Prometheus node-exporter
 
-- [ ] To setup the prometheus node-exporter:
+To setup the prometheus node-exporter:
 
 ```bash
 ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-node-exporter.yml
