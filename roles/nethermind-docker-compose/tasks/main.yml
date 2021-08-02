@@ -64,6 +64,13 @@
     state: link
   become: true
 
+- name: Copy Node Management CLI
+  copy:
+    src: "{{ chain }}/nnm-docker-compose"
+    dest: /usr/local/bin/nnm
+    mode: a+x
+  become: true
+
 - name: Copy docker-compose.yml file
   copy:
     src: "{{ chain }}/docker-compose.{{ chain }}.yml"

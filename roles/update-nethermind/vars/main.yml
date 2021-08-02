@@ -2,4 +2,4 @@
 ---
 # vars file for nethermind
 
-nethermind_branch: master
+branch: master

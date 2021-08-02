@@ -1,124 +1,124 @@
 # ansible-scripts
 Ansible playbooks to setup Nethermind nodes on different chains.
 
-OUT OF DATE - docs -> https://www.notion.so/Deploying-new-Nethermind-Node-with-Ansible-6033974128774d848060ffcf1e36b1c9
-
 ##### Table of Contents
-  * [Requirements](#requirements)
-  * [SSH key](#ssh-key)
-  * [Inventory](#inventory)
-    + [Setup inventory](#setup-inventory)
-  * [Create sudo user (optional)](#create-sudo-user-optional)
-  * [Setup Nethermind environment](#setup-nethermind-environment)
-    + [Encrypt Nethermind secrets](#encrypt-nethermind-secrets)
-    + [Run the Nethermind service](#run-the-nethermind-service)
-    + [Update the Nethermind service](#update-the-nethermind-service)
-    + [Utilities](#utilities)
-      - [Time sync](#time-sync)
-      - [Firewall](#firewall)
-      - [Prometheus node-exporter](#prometheus-node-exporter)
+  - [Requirements](#requirements)
+  - [Scripts](#scripts)
+    * [Create SSH Key](#create-ssh-key)
+    * [Deploy Nethermind docker-compose stack/systemd service](#deploy-nethermind-docker-compose-stack-systemd-service)
+  - [Playbooks](#playbooks)
+    * [Secure SSH](#secure-ssh)
+    * [Setup nethermind user](#setup-nethermind-user)
+    * [Setup docker-compose stack](#setup-docker-compose-stack)
+    * [Setup nethermind environment for systemd service](#setup-nethermind-environment-for-systemd-service)
+    * [Start nethermind systemd service](#start-nethermind-systemd-service)
+    * [Update Nethermind](#update-nethermind)
+    * [Utilities](#utilities)
+      + [Clock sync](#clock-sync)
+      + [Firewall](#firewall)
+      + [Prometheus node-exporter](#prometheus-node-exporter)
+      + [New Relic Agent](#new-relic-agent)
+      + [Clean the environment](#clean-the-environment)
 
 ## Requirements
 Make sure you are using `python3.x` with Ansible. To check: `ansible --version`
 
-## SSH key
-- [ ] Copy pem private key file as `.workspace/private.pem` to enable ssh through ansible.
+## Scripts
+Scripts are the fastest way for deployment of the nethermind client.
 
-## Inventory
-Ansible manages hosts using `inventory.yml` file. Current setup has `nethermind` group name.
+### Create SSH Key
 
-A group may have multiple IPs (hosts). Each Ansible command needs group name to be mentioned. Ansible runs the playbook on mentioned group's machines. Note that if you don't mention group name, Ansible will run playbook on all machines.
-
-### Setup inventory
-
-- [ ] Add nethermind node's IP/host under nethermind group.
-
-Example:
-```yml
-all:
-
-  hosts:
-  children:
-    nethermind:
-      hosts:
-        xxx.xxx.xx.xx: # <-- nethermind host public IP address
-```
-
-> **_NOTE:_** By default the user to login is setup as `ubuntu` in `group_vars/all` file. If you have a specific user to be logged in with please change the username in this file.
-
-- [ ] To check if nodes are reachable, run following commands:
+Create an ed25519 SSH key.
 
 ```bash
-ansible nethermind -m ping
+./create-ssh-key.sh [key_name]
 ```
 
-## Create `nethermind` sudo user
+### Deploy Nethermind docker-compose stack/systemd service
 
-- [ ] Change the `group_vars/all` user to any other user with sudo permissions e.g. `root`, `ubuntu`.
+Run the `setup-nethermind.sh` script.
 
-- [ ] Create a new SSH key for the user or use the existing ones instead.
+```bash
+./setup-nethermind.sh help
+```
+
+The script will setup:
+* system clock synchronization
+* nethermind sudo user
+* secure ssh connection (disabling root login)
+* nethermind environment for either systemd service or docker-compose stack
+* optionally install a New Relic agent
+
+## Playbooks
+
+Setup 3 variables:
+`PUBLIC_IP` - comma separated list of VM's IPv4 addresses
+`KEY_PATH` - path to private key which will be used for connection with VM
+`USER` - default user used to SSH into VM
+
+```bash
+export PUBLIC_IP=127.0.0.1
+export KEY_PATH=~/Work/ansible-scripts/.workspace/my_key
+export USER=root
+```
+
+### Secure SSH
+
+```bash
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER" playbooks/secure-ssh.yml
+```
+
+### Setup nethermind user
 
 > **_NOTE:_** We are using 100 KDF rounds here. Decrypting a key with `-a 100` parameter will take ~1.5sec each time during ssh.
 
 ```bash
 ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f .workspace/my_key_name
 ```
-- [ ] Put the just created `my_key_name.pub` content to `roles/setup-user/files/keys` and run:
+
+> **_NOTE:_** You might get prompted for a key passphrase if you set it up. Consider adding the identity to ssh agent with `ssh-add .workspace/my_key`
 
 ```bash
-ansible-playbook -l nethermind playbooks/setup-user.yml
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER ssh_user=nethermind ssh_identity_key=$KEY_PATH.pub" playbooks/setup-user.yml
 ```
 
-## Setup Nethermind environment
+### Setup docker-compose stack
 
-> **_NOTE:_** If you have created a `nethermind` user, then add it to the `group_vars/all` file before proceeding.
-
-- [ ] Change the `group_vars/all` file again, this time with the new user `nethermind` that you've just created.
-
-You can change the Nethermind's source branch in `roles/build-nethermind/vars/main.yml` by changing the value of `nethermind_branch`.
+If you wish to setup a docker-compose stack for `xDai Validator` you will need to add this variable to the ansible instructions below: `chain=xdai-validator`
 
 ```bash
-ansible-playbook -l nethermind playbooks/setup-nethermind.yml
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-docker-compose.yml
 ```
 
-> **_NOTE:_** You might get prompted for a key passphrase if you set it up. Consider adding the identity to ssh agent with `ssh-add .workspace/my_key_name`
-
-- [ ] Configure Nethermind's environment variables in `roles/nethermind-service/files/.env` file. This file will be consumed by the systemd service.
-
-### Run the Nethermind service
-
-- [ ] Run the nethermind service:
+### Setup nethermind environment for systemd service
 
 ```bash
-ansible-playbook -l nethermind playbooks/start-nethermind.yml
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-nethermind.yml
 ```
 
-#### Run the Nethermind backup service (optional)
-
-Runs the backup service alongside the main node service on the same hostmachine. Make sure that the `.env` file will be configured accordingly. To run:
+### Start nethermind systemd service
 
 ```bash
-ansible-playbook -l nethermind playbooks/start-nethermind-backup.yml
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/start-nethermind.yml
 ```
 
-### Update the Nethermind service
+### Update Nethermind
 
-You can switch the Nethermind's source branch in `roles/update-nethermind/vars/main.yml` by changing the value of `nethermind_branch`. 
-
-- [ ] To update Nethermind service run:
+Configure `branch=master` variable if you wish to run Nethermind from a different branch. 
+It won't apply to docker-compose stack since we're not building the images there and only pulling them.
 
 ```bash
-ansible-playbook -l nethermind playbooks/update-nethermind.yml
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind branch=master" playbooks/update-nethermind.yml
 ```
 
 ### Utilities
 
-#### Time sync
+#### Clock sync
 
 - [ ] To setup a script that's sychronizing system clock:
 
 ```bash
-ansible-playbook -l nethermind playbooks/setup-sync-clock.yml
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-sync-clock.yml
 ```
 
 #### Firewall
@@ -126,7 +126,7 @@ ansible-playbook -l nethermind playbooks/setup-sync-clock.yml
 - [ ] To setup an ufw firewall with open ports on 8545, 9100, 30303 tcp/udp:
 
 ```bash
-ansible-playbook -l nethermind playbooks/setup-firewall.yml
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-firewall.yml
 ```
 
 #### Prometheus node-exporter
@@ -134,5 +134,24 @@ ansible-playbook -l nethermind playbooks/setup-firewall.yml
 - [ ] To setup the prometheus node-exporter:
 
 ```bash
-ansible-playbook -l nethermind playbooks/setup-node-exporter.yml
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-node-exporter.yml
+```
+
+#### New Relic Agent 
+
+To install it use: 
+```bash
+ansible-galaxy collection install community.general
+```
+
+and then
+
+```bash
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/setup-newrelic.yml
+```
+
+#### Clean the environment
+
+```bash
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/clean.yml
 ```
