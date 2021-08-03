@@ -9,6 +9,7 @@
       - software-properties-common
     state: present
     update_cache: no
+  become: true
 
 - name: Add Docker GPG apt Key
   apt_key:

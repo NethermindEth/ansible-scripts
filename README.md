@@ -62,12 +62,6 @@ export KEY_PATH=~/Work/ansible-scripts/.workspace/my_key
 export USER=root
 ```
 
-### Secure SSH
-
-```bash
-ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER" playbooks/secure-ssh.yml
-```
-
 ### Setup nethermind user
 
 > **_NOTE:_** We are using 100 KDF rounds here. Decrypting a key with `-a 100` parameter will take ~1.5sec each time during ssh.
@@ -80,6 +74,14 @@ ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f .workspace/my_key_na
 
 ```bash
 ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER ssh_user=nethermind ssh_identity_key=$KEY_PATH.pub" playbooks/setup-user.yml
+```
+
+### Secure SSH
+
+> **_NOTE:_** This will permit root login, make sure you've created a nethermind user first.
+
+```bash
+ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER" playbooks/secure-ssh.yml
 ```
 
 ### Setup docker-compose stack
