@@ -57,7 +57,7 @@ else
       sed -i '' "s/CONFIG=.*/CONFIG=mainnet_pruned/" roles/nethermind-docker-compose/files/common/.env.common
     fi
 fi
- 
+
 while true; do
     read -e -p "Do you wish to install New Relic Agent (License Key required)? (Y/n) " yn
     case $yn in
