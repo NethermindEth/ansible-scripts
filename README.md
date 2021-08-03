@@ -8,7 +8,7 @@ Ansible playbooks to setup Nethermind nodes on different chains.
     * [Deploy Nethermind docker-compose stack/systemd service](#deploy-nethermind-docker-compose-stack-systemd-service)
   - [Playbooks](#playbooks)
     * [Setup nethermind user](#setup-nethermind-user)
-    * [Secure SSH](#secure-ssh-optional)
+    * [Secure SSH (optional)](#secure-ssh-optional)
     * [Setup docker-compose stack](#setup-docker-compose-stack)
     * [Setup nethermind environment for systemd service](#setup-nethermind-environment-for-systemd-service)
     * [Start nethermind systemd service](#start-nethermind-systemd-service)
@@ -76,7 +76,7 @@ ssh-keygen -qa 100 -t ed25519 -C "your@emailaddress.com" -f .workspace/my_key_na
 ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=$USER ssh_user=nethermind ssh_identity_key=$KEY_PATH.pub" playbooks/setup-user.yml
 ```
 
-### Secure SSH (Optional)
+### Secure SSH (optional)
 
 > **_NOTE:_** ⚠️ This will disallow the `root` login, make sure you've created a nethermind user first.
 
