@@ -24,7 +24,7 @@
 
 - name: Install .NET Core 5.0 SDK
   apt:
-    name: dotnet-sdk-5.0
+    name: dotnet-sdk-6.0
     state: present
     update_cache: yes
   register: apt_action
@@ -56,4 +56,3 @@
   apt:
     pkg: libc6
   become: true
-
