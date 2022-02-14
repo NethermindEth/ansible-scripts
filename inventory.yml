@@ -1,10 +1,7 @@
-# all:
+all:
 
-#   hosts:
-#   children:
-#     nethermind:
-#       hosts:
-#         :
-
-[defaults]
-104.237.129.180
+  hosts:
+  children:
+    nethermind:
+      hosts:
+        :
