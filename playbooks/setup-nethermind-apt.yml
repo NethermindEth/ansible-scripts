@@ -10,9 +10,9 @@
       tags:
         - install_dependencies
 
-    - name: Build Nethermind
+    - name: Install Nethermind via APT
       include_role:
-        name: roles/build-nethermind
+        name: roles/nethermind-apt
         apply:
           tags: always
       tags:

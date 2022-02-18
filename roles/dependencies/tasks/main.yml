@@ -22,7 +22,7 @@
     update_cache: no
   become: true
 
-- name: Install .NET Core 5.0 SDK
+- name: Install .NET Core 6.0 SDK
   apt:
     name: dotnet-sdk-6.0
     state: present
