@@ -44,11 +44,11 @@ else
     
     if [ "$SERVICE_TYPE" == "systemd" ]; then
       echo "==> Setting up Nethermind environment"
-      ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind nethermind_branch=$BRANCH_NAME" playbooks/setup-nethermind.yml
+      ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind nethermind_branch=$BRANCH_NAME" playbooks/setup-nethermind-apt.yml
 
       echo "==> Setting up Nethermind systemd service and starting it"
       sed -i '' "s/NETHERMIND_CONFIG=.*/NETHERMIND_CONFIG=$CHAIN_NAME/" roles/nethermind-service/files/.env
-      ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/start-nethermind.yml
+      ansible-playbook -i "$PUBLIC_IP," --private-key $KEY_PATH --extra-vars "ansible_user=nethermind" playbooks/start-nethermind-apt.yml
       sed -i '' "s/NETHERMIND_CONFIG=.*/NETHERMIND_CONFIG=mainnet_pruned/" roles/nethermind-service/files/.env
     else
       echo "==> Setting up Nethermind docker-compose stack and starting it"
