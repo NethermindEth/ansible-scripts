@@ -1,0 +1,31 @@
+---
+- name: Setup nethermind service
+  copy:
+    src: nethermind.service
+    dest: /etc/systemd/system/nethermind.service
+    mode: "755"
+  notify:
+    - reload nethermind
+  become: true
+
+- name: Create data directory
+  file:
+    path: "{{ ansible_env.HOME }}/data"
+    state: directory
+
+- name: Copy Node Management CLI
+  copy:
+    src: nnm-service
+    dest: /usr/local/bin/nnm
+    mode: a+x
+  become: true
+
+- name: Copy environment file
+  copy:
+    src: .env
+    dest: "{{ ansible_env.HOME }}/data/.env"
+  notify:
+    - reload nethermind
+    - restart nethermind
+  changed_when: true
+  become: true

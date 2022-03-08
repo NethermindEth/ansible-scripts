@@ -1,0 +1,18 @@
+---
+
+# reload handlers
+
+- name: reload nethermind
+  systemd:
+    name: nethermind
+    enabled: yes
+    daemon_reload: yes
+  become: true
+
+# restart handlers
+
+- name: restart nethermind
+  systemd:
+    name: nethermind
+    state: restarted
+  become: true

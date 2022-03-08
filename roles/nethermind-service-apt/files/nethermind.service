@@ -1,0 +1,9 @@
+[Unit]
+Description=Nethermind Node
+Documentation=https://docs.nethermind.io
+
+[Service]
+ExecStart=/usr/bin/nethermind --config mainnet_pruned
+
+[Install]
+WantedBy=multi-user.target

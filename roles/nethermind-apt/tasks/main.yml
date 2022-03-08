@@ -1,0 +1,25 @@
+---
+# - name: Setup Nethermind Node environment
+#   tasks:
+    # - name: Install dependencies
+    #   include_role:
+    #     name: roles/dependencies
+    #     apply:
+    #       tags: always
+    #   tags:
+    #     - install_dependencies
+    
+- name: Add Nethermind Apt Repo
+  ansible.builtin.apt_repository:
+    repo: ppa:nethermindeth/nethermind
+    state: present
+  become: true
+
+- name: Install Nethermind
+  apt:
+    pkg: nethermind
+  become: true
+    
+    # - name: Enable Nethermind Service
+    #   include_role:
+    #     name: roles/nethermind-service-apt

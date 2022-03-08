@@ -1,0 +1,11 @@
+---
+- name: Setup and start Nethermind Node service
+  hosts: all
+  tasks:
+    - name: Setup Nethermind Node
+      include_role:
+        name: roles/nethermind-service-apt
+        apply:
+          tags: always
+      tags:
+        - install
